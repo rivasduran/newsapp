@@ -32,26 +32,26 @@ class NewsService with ChangeNotifier {
   NewsService() {
     this.getTopHeadlines();
 
-    // categories.forEach( (item) {
-    //   this.categoryArticles[item.name] = new List();
-    // });
+    categories.forEach( (item) {
+      this.categoryArticles[item.name] = [];
+    });
 
-    // this.getArticlesByCategory( this._selectedCategory );
+    this.getArticlesByCategory( this._selectedCategory );
   }
 
   bool get isLoading => this._isLoading;
 
 
-  // get selectedCategory => this._selectedCategory;
-  // set selectedCategory( String valor ) {
-  //   this._selectedCategory = valor;
+  String get selectedCategory => this._selectedCategory;
+  set selectedCategory( String valor ) {
+    this._selectedCategory = valor;
 
-  //   this._isLoading = true;
-  //   this.getArticlesByCategory( valor );
-  //   notifyListeners();
-  // }
+    this._isLoading = true;
+    this.getArticlesByCategory( valor );
+    notifyListeners();
+  }
   
-  //List<Article> get getArticulosCategoriaSeleccionada => this.categoryArticles[ this.selectedCategory ];
+  List<Article>? get getArticulosCategoriaSeleccionada => this.categoryArticles[ this.selectedCategory ];
 
 
 
@@ -66,25 +66,29 @@ class NewsService with ChangeNotifier {
       notifyListeners();
   }
 
-  // getArticlesByCategory( String category ) async {
+  getArticlesByCategory( String category ) async {
 
-  //     if ( this.categoryArticles[category].length > 0 ) {
-  //       this._isLoading = false;
-  //       notifyListeners();
-  //       return this.categoryArticles[category];
-  //     }
+      // if ( this.categoryArticles[category].length > 0 ) {
+      //   this._isLoading = false;
+      //   notifyListeners();
+      //   return this.categoryArticles[category];
+      // }
 
-  //     final url ='$_URL_NEWS/top-headlines?apiKey=$_APIKEY&country=ca&category=$category';
-  //     final resp = await http.get(url);
+      print("Llega a las categorias");
 
-  //     final newsResponse = newsResponseFromJson( resp.body );
+      final url ='$_URL_NEWS/top-headlines?apiKey=$_APIKEY&country=ca&category=$category';
+      final resp = await http.get(Uri.parse(url));
 
-  //     this.categoryArticles[category].addAll( newsResponse.articles );
+      final newsResponse = newsResponseFromJson( resp.body );
 
-  //     this._isLoading = false;
-  //     notifyListeners();
+      print(newsResponse);
 
-  // }
+      this.categoryArticles[category]!.addAll( newsResponse.articles );
+
+      this._isLoading = false;
+      notifyListeners();
+
+  }
 
 
 }
